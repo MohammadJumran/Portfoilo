@@ -86,7 +86,7 @@ export const Hero = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
           {/* Left — text */}
-          <div className="space-y-8">
+          <div className="space-y-8 min-w-0">
             <Motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -102,11 +102,11 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.08 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]"
+              className="text-[clamp(1.7rem,7vw,3.75rem)] font-bold leading-[1.1] break-words"
             >
               {t.hero.greeting} {t.hero.name}.
               <br />
-              <span className="text-muted-foreground text-3xl md:text-4xl lg:text-5xl">
+              <span className="text-muted-foreground text-[clamp(1.4rem,5.5vw,3rem)]">
                 {t.hero.iam}
               </span>
               <br />

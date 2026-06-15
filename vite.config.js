@@ -11,4 +11,8 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    // Honor a PORT injected by tooling (e.g. preview harness); fall back to Vite's default.
+    port: process.env.PORT ? Number(process.env.PORT) : undefined,
+  },
 });

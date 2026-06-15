@@ -115,7 +115,7 @@ export const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto mt-16">
           {/* Form */}
-          <Reveal direction="right">
+          <Reveal direction="right" className="min-w-0">
             <div className="panel rounded-3xl p-8 border-primary/20">
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
@@ -213,7 +213,7 @@ export const Contact = () => {
           </Reveal>
 
           {/* Info */}
-          <Reveal direction="left" className="space-y-6">
+          <Reveal direction="left" className="space-y-6 min-w-0">
             <div className="panel rounded-3xl p-8">
               <h3 className="text-xl font-semibold mb-6">
                 {t.contact.infoTitle}
@@ -225,14 +225,14 @@ export const Contact = () => {
                     href={item.href}
                     className="flex items-center gap-4 p-4 rounded-xl hover:bg-surface transition-colors group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0">
                       <item.icon className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="text-sm text-muted-foreground">
                         {item.label}
                       </div>
-                      <div className="font-medium">{item.value}</div>
+                      <div className="font-medium break-words">{item.value}</div>
                     </div>
                   </a>
                 ))}
