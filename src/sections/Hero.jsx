@@ -177,8 +177,8 @@ export const Hero = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="relative max-w-md mx-auto w-full"
           >
-            {/* Skill-category icons travelling around the photo frame (desktop) */}
-            <div className="hidden lg:block absolute inset-0 z-20 pointer-events-none">
+            {/* Skill-category icons travelling around the photo frame */}
+            <div className="absolute inset-0 z-20 pointer-events-none">
               {orbitIcons.map((Icon, i) => (
                 <div
                   key={i}
@@ -190,7 +190,7 @@ export const Hero = () => {
                     ).toFixed(2)}s`,
                   }}
                 >
-                  <span className="flex items-center justify-center w-12 h-12 rounded-xl glass text-primary shadow-lg shadow-primary/10">
+                  <span className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 rounded-xl glass text-primary shadow-lg shadow-primary/10">
                     <Icon className="w-5 h-5" />
                   </span>
                 </div>
