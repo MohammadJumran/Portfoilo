@@ -24,6 +24,12 @@
 }
 
 @layer base {
+  :root {
+    /* Eased mouse position, published by <MouseParallax />. */
+    --mx: 0;
+    --my: 0;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -40,6 +46,41 @@
 
   .font-serif {
     font-family: "Playfair Display", serif;
+  }
+
+  .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  /* Arabic typography — switch to Cairo and drop Latin italics in RTL */
+  html[lang="ar"] body,
+  html[lang="ar"] {
+    font-family: "Cairo", "Inter", sans-serif;
+  }
+  html[lang="ar"] .font-serif {
+    font-family: "Cairo", sans-serif;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* Respect users who prefer reduced motion (accessibility) */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  /* Visible focus ring for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 }
 
@@ -65,6 +106,92 @@
     box-shadow: 0 0 20px
         color-mix(in srgb, var(--color-primary) 20%, transparent),
       inset 0 0 20px color-mix(in srgb, var(--color-primary) 5%, transparent);
+  }
+
+  /* Mouse-follow parallax — background layers drift with the pointer.
+     Different depths move by different amounts to create a sense of space. */
+  .parallax-soft {
+    transform: translate3d(
+      calc(var(--mx, 0) * 8px),
+      calc(var(--my, 0) * 8px),
+      0
+    );
+    will-change: transform;
+  }
+  .parallax-mid {
+    transform: translate3d(
+      calc(var(--mx, 0) * 18px),
+      calc(var(--my, 0) * 18px),
+      0
+    );
+    will-change: transform;
+  }
+  .parallax-strong {
+    transform: translate3d(
+      calc(var(--mx, 0) * -34px),
+      calc(var(--my, 0) * -34px),
+      0
+    );
+    will-change: transform;
+  }
+
+  /* Enterprise network grid background */
+  .grid-bg {
+    background-image: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-border) 60%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-border) 60%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 56px 56px;
+  }
+
+  .grid-bg-fade {
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+  }
+
+  /* Subtle dotted texture for cards / panels */
+  .dot-grid {
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--color-primary) 22%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+  }
+
+  /* Gradient hairline used on premium panels */
+  .panel {
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-surface) 70%, transparent),
+      color-mix(in srgb, var(--color-card) 70%, transparent)
+    );
+    border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+    backdrop-filter: blur(16px);
+  }
+
+  .panel-hover {
+    transition: border-color 0.4s ease, transform 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+  .panel-hover:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+    box-shadow: 0 8px 40px
+      color-mix(in srgb, var(--color-primary) 12%, transparent);
   }
 }
 
@@ -181,4 +308,159 @@
         color-mix(in srgb, var(--color-primary) 35%, transparent),
       0 0 80px color-mix(in srgb, var(--color-primary) 25%, transparent);
   }
+
+  /* Vertical data-flow pulse travelling down a line */
+  @keyframes data-flow {
+    0% {
+      transform: translateY(-120%);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(820%);
+      opacity: 0;
+    }
+  }
+  .animate-data-flow {
+    animation: data-flow 4s linear infinite;
+  }
+
+  /* Slow horizontal scan sweep for hero / panels */
+  @keyframes scan {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+  .animate-scan {
+    animation: scan 6s ease-in-out infinite;
+  }
+
+  /* Soft grid drift */
+  @keyframes grid-pan {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 56px 56px;
+    }
+  }
+  .animate-grid-pan {
+    animation: grid-pan 8s linear infinite;
+  }
+
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  /* Icons travelling around the hero photo frame (rectangular perimeter) */
+  @keyframes frame-march {
+    0% {
+      top: 0%;
+      left: 0%;
+    }
+    25% {
+      top: 0%;
+      left: 100%;
+    }
+    50% {
+      top: 100%;
+      left: 100%;
+    }
+    75% {
+      top: 100%;
+      left: 0%;
+    }
+    100% {
+      top: 0%;
+      left: 0%;
+    }
+  }
+  .frame-march {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    animation: frame-march 24s linear infinite;
+  }
+}
+
+/* ============================================================
+   Custom "specialist" cursor — a precise dot plus a heavier ring
+   that trails with inertia. Native cursor is hidden only on
+   fine-pointer (desktop) devices; touch keeps the default.
+   ============================================================ */
+@media (pointer: fine) {
+  html.cursor-custom,
+  html.cursor-custom * {
+    cursor: none !important;
+  }
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 9999px;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--color-primary);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-primary) 70%, transparent);
+}
+
+.cursor-ring {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid color-mix(in srgb, var(--color-primary) 65%, transparent);
+  transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease, opacity 0.25s ease;
+}
+
+.cursor-ring--hover {
+  width: 64px;
+  height: 64px;
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  border-color: var(--color-primary);
+}
+
+.cursor-ring--down {
+  width: 30px;
+  height: 30px;
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+/* ============================================================
+   Ugaritic glyph background — faint, organized "ancient cipher"
+   texture behind all content.
+   ============================================================ */
+.ugaritic-field {
+  margin: 0;
+  height: 100%;
+  padding: 1.5rem;
+  font-family: "Noto Sans Ugaritic", serif;
+  font-size: 2rem;
+  line-height: 2.7rem;
+  letter-spacing: 0.4rem;
+  text-align: justify;
+  word-break: break-word;
+  color: var(--color-primary);
+  opacity: 0.06;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
 }

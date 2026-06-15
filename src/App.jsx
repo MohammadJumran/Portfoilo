@@ -1,26 +1,46 @@
+import { Routes, Route } from "react-router-dom";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { CustomCursor } from "@/components/CustomCursor";
+import { GlyphBackground } from "@/components/GlyphBackground";
+import { MouseParallax } from "@/components/MouseParallax";
 import { Navbar } from "@/layout/Navbar";
+import { Footer } from "@/layout/Footer";
 import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
-import { Projects } from "@/sections/Projects";
+import { Skills } from "@/sections/Skills";
 import { Experience } from "@/sections/Experience";
-import { Testimonials } from "@/sections/Testimonials";
+import { Projects } from "@/sections/Projects";
+import { Stats } from "@/sections/Stats";
 import { Contact } from "@/sections/Contact";
-import { Footer } from "./layout/Footer";
+import { AllProjects } from "@/pages/AllProjects";
+
+const Home = () => (
+  <div className="min-h-screen overflow-x-hidden">
+    <Navbar />
+    <main>
+      <Hero />
+      <About />
+      <Skills />
+      <Experience />
+      <Projects />
+      <Stats />
+      <Contact />
+    </main>
+    <Footer />
+  </div>
+);
 
 function App() {
   return (
-    <div className="min-h-screen overflow-x-hidden">
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Projects />
-        <Experience />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <SmoothScroll>
+      <GlyphBackground />
+      <MouseParallax />
+      <CustomCursor />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<AllProjects />} />
+      </Routes>
+    </SmoothScroll>
   );
 }
 

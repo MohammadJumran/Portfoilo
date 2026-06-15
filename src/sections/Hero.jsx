@@ -1,201 +1,287 @@
-import { Button } from "@/components/Button";
+import { useEffect, useState } from "react";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
-  ChevronDown,
+  Download,
   Github,
   Linkedin,
-  Twitter,
-  Download,
+  ShieldCheck,
+  Activity,
+  MapPin,
+  Server,
+  Network,
+  Cloud,
+  Database,
+  Cctv,
+  TerminalSquare,
 } from "lucide-react";
-import { AnimatedBorderButton } from "../components/AnimatedBorderButton";
+import { KaliLinux } from "@/components/icons/KaliLinux";
+import { Button } from "@/components/Button";
+import { Badge } from "@/components/Badge";
+import { NetworkBackground } from "@/components/NetworkBackground";
+import { useT } from "@/i18n/translations";
+import { site } from "@/data/site";
+import { techMarquee } from "@/data/skills";
+import profilePhoto from "@/assets/Paper/image.jpg";
+import cvFile from "@/assets/Paper/CV.pdf";
 
-const skills = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "Node.js",
-  "GraphQL",
-  "PostgreSQL",
-  "MongoDB",
-  "Redis",
-  "Docker",
-  "AWS",
-  "Vercel",
-  "Tailwind CSS",
-  "Prisma",
-  "Jest",
-  "Cypress",
-  "Figma",
-  "Git",
-  "GitHub Actions",
+// Skill-category icons travelling around the profile photo frame.
+const orbitIcons = [
+  Server,
+  Network,
+  ShieldCheck,
+  Cloud,
+  Database,
+  Cctv,
+  KaliLinux,
+  TerminalSquare,
 ];
 
-export const Hero = () => {
+const handleDownloadCV = () => {
+  const link = document.createElement("a");
+  link.href = cvFile;
+  link.download = "Mohammad-Jumran-CV.pdf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+const RotatingRole = () => {
+  const t = useT();
+  const roles = t.hero.roles;
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % roles.length), 2600);
+    return () => clearInterval(id);
+  }, [roles.length]);
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Bg */}
-      <div className="absolute inset-0">
-        <img
-          src="/hero-bg.jpg"
-          alt="Hero image"
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/80 to-background" />
-      </div>
+    <span className="relative inline-flex h-[1.2em] overflow-hidden align-bottom">
+      <AnimatePresence mode="wait">
+        <Motion.span
+          key={`${index}-${roles[index]}`}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="text-primary glow-text whitespace-nowrap"
+        >
+          {roles[index]}
+        </Motion.span>
+      </AnimatePresence>
+    </span>
+  );
+};
 
-      {/* Green Dots */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(30)].map((_, i) => (
-          <div
-            className="absolute w-1.5 h-1.5 rounded-full opacity-60"
-            style={{
-              backgroundColor: "#20B2A6",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `slow-drift ${
-                15 + Math.random() * 20
-              }s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-      </div>
+export const Hero = () => {
+  const t = useT();
 
-      {/* Content */}
-      <div className="container mx-auto px-6 pt-32 pb-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Text Content */}
+  return (
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center overflow-hidden pt-28 pb-16"
+    >
+      <NetworkBackground variant="hero" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
+          {/* Left — text */}
           <div className="space-y-8">
-            <div className="animate-fade-in">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                Software Engineer • React Specialist
+            <Motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Badge variant="primary" icon={Activity}>
+                {t.hero.available} · {site.yearsExperience}{" "}
+                {t.hero.yearsExperience}
+              </Badge>
+            </Motion.div>
+
+            <Motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.08 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]"
+            >
+              {t.hero.greeting} {t.hero.name}.
+              <br />
+              <span className="text-muted-foreground text-3xl md:text-4xl lg:text-5xl">
+                {t.hero.iam}
               </span>
-            </div>
+              <br />
+              <RotatingRole />
+            </Motion.h1>
 
-            {/* Headline */}
-            <div className="space-y-4">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight animate-fade-in animation-delay-100">
-                Crafting <span className="text-primary glow-text">digital</span>
-                <br />
-                experiences with
-                <br />
-                <span className="font-serif italic font-normal text-white">
-                  precision.
-                </span>
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
-                Hi, I'm Pedro Machado — a software engineer specializing in
-                React, Next.js, and TypeScript. I build scalable, performant web
-                applications that users love.
-              </p>
-            </div>
+            <Motion.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.16 }}
+              className="text-lg text-muted-foreground max-w-xl"
+            >
+              {t.hero.summary}
+            </Motion.p>
 
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button size="lg">
-                Contact Me <ArrowRight className="w-5 h-5" />
-              </Button>
-              <AnimatedBorderButton>
+            <Motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.24 }}
+              className="flex flex-wrap gap-4"
+            >
+              <a href="#contact">
+                <Button size="lg">
+                  {t.hero.getInTouch} <ArrowRight className="w-5 h-5" />
+                </Button>
+              </a>
+              <Button variant="outline" size="lg" onClick={handleDownloadCV}>
                 <Download className="w-5 h-5" />
-                Download CV
-              </AnimatedBorderButton>
-            </div>
+                {t.hero.downloadCV}
+              </Button>
+            </Motion.div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
-              <span className="text-sm text-muted-foreground">Follow me: </span>
+            <Motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.32 }}
+              className="flex items-center gap-4 pt-2"
+            >
+              <span className="text-sm text-muted-foreground">
+                {t.hero.connect}
+              </span>
               {[
-                { icon: Github, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Twitter, href: "#" },
-              ].map((social, idx) => (
+                { icon: Github, href: site.socials.github, label: "GitHub" },
+                {
+                  icon: Linkedin,
+                  href: site.socials.linkedin,
+                  label: "LinkedIn",
+                },
+              ].map((s) => (
                 <a
-                  key={idx}
-                  href={social.href}
-                  className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="p-2.5 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
                 >
-                  {<social.icon className="w-5 h-5" />}
+                  <s.icon className="w-5 h-5" />
                 </a>
               ))}
-            </div>
+            </Motion.div>
           </div>
-          {/* Right Column - Profile Image */}
-          <div className="relatice animate-fade-in animation-delay-300">
-            {/* Profile Image */}
-            <div className="relative max-w-md mx-auto">
-              <div
-                className="absolute inset-0 
-              rounded-3xl bg-gradient-to-br 
-              from-primary/30 via-transparent 
-              to-primary/10 blur-2xl animate-pulse"
-              />
-              <div className="relative glass rounded-3xl p-2 glow-border">
-                <img
-                  src="/profile-photo.jpg"
-                  alt="Pedro Machado"
-                  className="w-full aspect-[4/5] object-cover rounded-2xl"
-                />
 
-                {/* Floating Badge */}
-                <div className="absolute -bottom-4 -right-4 glass rounded-xl px-4 py-3 animate-float">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-sm font-medium">
-                      Available for work
-                    </span>
-                  </div>
-                </div>
-                {/* Stats Badge */}
-                <div className="absolute -top-4 -left-4 glass rounded-xl px-4 py-3 animate-float animation-delay-500">
-                  <div className="text-2xl font-bold text-primary">5+</div>
-                  <div className="text-xs text-muted-foreground">
-                    Years Exp.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Skills Section */}
-        <div className="mt-20 animate-fade-in animation-delay-600">
-          <p className="text-sm text-muted-foreground mb-6 text-center">
-            Technologies I work with
-          </p>
-          <div className="relative overflow-hidden">
-            <div
-              className="absolute left-0 top-0 bottom-0 w-32
-             bg-gradient-to-r from-background to-transparent z-10"
-            />
-            <div
-              className="absolute right-0 top-0 bottom-0 w-32
-             bg-gradient-to-l from-background to-transparent z-10"
-            />
-            <div className="flex animate-marquee">
-              {[...skills, ...skills].map((skill, idx) => (
-                <div key={idx} className="flex-shrink-0 px-8 py-4">
-                  <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
-                    {skill}
+          {/* Right — profile dashboard card */}
+          <Motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative max-w-md mx-auto w-full"
+          >
+            {/* Skill-category icons travelling around the photo frame (desktop) */}
+            <div className="hidden lg:block absolute inset-0 z-20 pointer-events-none">
+              {orbitIcons.map((Icon, i) => (
+                <div
+                  key={i}
+                  className="frame-march"
+                  style={{
+                    animationDelay: `-${(
+                      i *
+                      (24 / orbitIcons.length)
+                    ).toFixed(2)}s`,
+                  }}
+                >
+                  <span className="flex items-center justify-center w-12 h-12 rounded-xl glass text-primary shadow-lg shadow-primary/10">
+                    <Icon className="w-5 h-5" />
                   </span>
                 </div>
               ))}
             </div>
+
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 via-transparent to-primary/10 blur-2xl animate-pulse" />
+
+            <div className="relative panel rounded-3xl p-3 glow-border">
+              {/* Window chrome */}
+              <div className="flex items-center justify-between px-3 py-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                </div>
+                <span className="font-mono text-[10px] text-muted-foreground">
+                  {t.hero.statusOperational}
+                </span>
+              </div>
+
+              <div className="relative overflow-hidden rounded-2xl">
+                <img
+                  src={profilePhoto}
+                  alt={`${site.name}, ${t.hero.roles[0]}`}
+                  className="w-full aspect-[4/5] object-cover rounded-2xl"
+                  loading="eager"
+                  width={480}
+                  height={600}
+                />
+                {/* Scan sweep */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  <div className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-primary/10 to-transparent animate-scan" />
+                </div>
+
+                {/* Availability chip */}
+                <div className="absolute bottom-3 left-3 glass rounded-xl px-3 py-2 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-xs font-medium">{t.hero.available}</span>
+                </div>
+              </div>
+
+              {/* Mini stat row */}
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                <div className="glass rounded-xl px-4 py-3">
+                  <div className="flex items-center gap-2 text-primary">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span className="text-lg font-bold">
+                      {site.yearsExperience}+
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    {t.hero.yearsSecuring}
+                  </div>
+                </div>
+                <div className="glass rounded-xl px-4 py-3">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    <span className="text-xs font-medium">
+                      {t.hero.locationCity}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    {t.hero.locationSub}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Motion.div>
+        </div>
+
+        {/* Tech marquee */}
+        <div className="mt-16 lg:mt-20">
+          <p className="text-xs text-muted-foreground mb-5 text-center uppercase tracking-wider">
+            {t.hero.techTitle}
+          </p>
+          <div className="relative overflow-hidden" dir="ltr">
+            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
+            <div className="flex animate-marquee w-max">
+              {[...techMarquee, ...techMarquee].map((tech, idx) => (
+                <span
+                  key={idx}
+                  className="flex-shrink-0 px-6 py-2 font-mono text-sm text-muted-foreground/60 hover:text-primary transition-colors"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 
-      animate-fade-in animation-delay-800"
-      >
-        <a
-          href="#about"
-          className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
-        >
-          <span className="text-xs uppercase tracking-wider">Scroll</span>
-          <ChevronDown className="w-6 h-6 animate-bounce" />
-        </a>
       </div>
     </section>
   );

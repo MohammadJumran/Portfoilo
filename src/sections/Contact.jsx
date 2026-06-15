@@ -5,219 +5,223 @@ import {
   Send,
   CheckCircle,
   AlertCircle,
+  Github,
+  Linkedin,
+  Download,
+  MessageSquare,
 } from "lucide-react";
-import { Button } from "@/components/Button";
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
+import { Button } from "@/components/Button";
+import { SectionHeader } from "@/components/SectionHeader";
+import { Reveal } from "@/components/Reveal";
+import { NetworkBackground } from "@/components/NetworkBackground";
+import { useT } from "@/i18n/translations";
+import { site } from "@/data/site";
+import cvFile from "@/assets/Paper/CV.pdf";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "pedro@example.com",
-    href: "mailto:pedro@example.com",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "San Francisco, CA",
-    href: "#",
-  },
+const socials = [
+  { icon: Linkedin, label: "LinkedIn", href: site.socials.linkedin },
+  { icon: Github, label: "GitHub", href: site.socials.github },
 ];
 
+const handleDownloadCV = () => {
+  const link = document.createElement("a");
+  link.href = cvFile;
+  link.download = "Mohammad-Jumran-CV.pdf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 export const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const t = useT();
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState({
-    type: null, // 'success' or 'error'
-    message: "",
-  });
+  const [submitStatus, setSubmitStatus] = useState({ type: null, message: "" });
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: t.contact.info.email,
+      value: site.email,
+      href: `mailto:${site.email}`,
+    },
+    {
+      icon: Phone,
+      label: t.contact.info.phone,
+      value: site.phone,
+      href: site.phoneHref,
+    },
+    {
+      icon: MapPin,
+      label: t.contact.info.location,
+      value: t.contact.locationValue,
+      href: "#",
+    },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoading(true);
     setSubmitStatus({ type: null, message: "" });
     try {
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error(
-          "EmailJS configuration is missing. Please check your environment variables."
-        );
-      }
-
-      await emailjs.send(
-        serviceId,
-        templateId,
+      const response = await fetch(
+        "https://formsubmit.co/ajax/mohammadjum600@gmail.com",
         {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        },
-        publicKey
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            _subject: `New portfolio message from ${formData.name}`,
+            _template: "table",
+          }),
+        }
       );
 
-      setSubmitStatus({
-        type: "success",
-        message: "Message sent successfully! I'll get back to you soon.",
-      });
+      const data = await response.json();
+
+      // FormSubmit returns success as the string "true"
+      if (data.success !== "true" && data.success !== true) {
+        throw new Error(data.message || t.contact.error);
+      }
+
+      setSubmitStatus({ type: "success", message: t.contact.success });
       setFormData({ name: "", email: "", message: "" });
-    } catch (err) {
-      console.error("EmailJS error:", error);
-      setSubmitStatus({
-        type: "error",
-        message:
-          error.text || "Failed to send message. Please try again later.",
-      });
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setSubmitStatus({ type: "error", message: t.contact.error });
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
-    <section id="contact" className="py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-highlight/5 rounded-full blur-3xl" />
-      </div>
+    <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
+      <NetworkBackground variant="default" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase animate-fade-in">
-            Get In Touch
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 animate-fade-in animation-delay-100 text-secondary-foreground">
-            Let's build{" "}
-            <span className="font-serif italic font-normal text-white">
-              something great.
-            </span>
-          </h2>
-          <p className="text-muted-foreground animate-fade-in animation-delay-200">
-            Have a project in mind? I'd love to hear about it. Send me a message
-            and let's discuss how we can work together.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow={t.contact.eyebrow}
+          eyebrowIcon={MessageSquare}
+          title={t.contact.title}
+          accent={t.contact.accent}
+          description={t.contact.description}
+        />
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          <div className="glass p-8 rounded-3xl border border-primary/30 animate-fade-in animation-delay-300">
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium mb-2"
-                >
-                  Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  placeholder="Your name..."
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  type="email"
-                  className="block text-sm font-medium mb-2"
-                >
-                  Email
-                </label>
-                <input
-                  required
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium mb-2"
-                >
-                  Message
-                </label>
-                <textarea
-                  rows={5}
-                  required
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  placeholder="Your message..."
-                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
-                />
-              </div>
-
-              <Button
-                className="w-full"
-                type="submit"
-                size="lg"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>Sending...</>
-                ) : (
-                  <>
-                    Send Message
-                    <Send className="w-5 h-5" />
-                  </>
-                )}
-              </Button>
-
-              {submitStatus.type && (
-                <div
-                  className={`flex items-center gap-3
-                     p-4 rounded-xl ${
-                       submitStatus.type === "success"
-                         ? "bg-green-500/10 border border-green-500/20 text-green-400"
-                         : "bg-red-500/10 border border-red-500/20 text-red-400"
-                     }`}
-                >
-                  {submitStatus.type === "success" ? (
-                    <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                  ) : (
-                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                  )}
-                  <p className="text-sm">{submitStatus.message}</p>
+        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto mt-16">
+          {/* Form */}
+          <Reveal direction="right">
+            <div className="panel rounded-3xl p-8 border-primary/20">
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2">
+                    {t.contact.nameLabel}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    required
+                    placeholder={t.contact.namePlaceholder}
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  />
                 </div>
-              )}
-            </form>
-          </div>
 
-          {/* Contact Info */}
-          <div className="space-y-6 animate-fade-in animation-delay-400">
-            <div className="glass rounded-3xl p-8">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2">
+                    {t.contact.emailLabel}
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    required
+                    dir="ltr"
+                    placeholder={t.contact.emailPlaceholder}
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium mb-2"
+                  >
+                    {t.contact.messageLabel}
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={5}
+                    required
+                    value={formData.message}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
+                    placeholder={t.contact.messagePlaceholder}
+                    className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
+                  />
+                </div>
+
+                <Button
+                  className="w-full"
+                  type="submit"
+                  size="lg"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>{t.contact.sending}</>
+                  ) : (
+                    <>
+                      {t.contact.send}
+                      <Send className="w-5 h-5" />
+                    </>
+                  )}
+                </Button>
+
+                {submitStatus.type && (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className={`flex items-center gap-3 p-4 rounded-xl ${
+                      submitStatus.type === "success"
+                        ? "bg-green-500/10 border border-green-500/20 text-green-400"
+                        : "bg-red-500/10 border border-red-500/20 text-red-400"
+                    }`}
+                  >
+                    {submitStatus.type === "success" ? (
+                      <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    )}
+                    <p className="text-sm">{submitStatus.message}</p>
+                  </div>
+                )}
+              </form>
+            </div>
+          </Reveal>
+
+          {/* Info */}
+          <Reveal direction="left" className="space-y-6">
+            <div className="panel rounded-3xl p-8">
               <h3 className="text-xl font-semibold mb-6">
-                Contact Information
+                {t.contact.infoTitle}
               </h3>
-              <div className="space-y-4">
-                {contactInfo.map((item, i) => (
+              <div className="space-y-3">
+                {contactInfo.map((item) => (
                   <a
-                    key={i}
+                    key={item.label}
                     href={item.href}
                     className="flex items-center gap-4 p-4 rounded-xl hover:bg-surface transition-colors group"
                   >
@@ -233,21 +237,44 @@ export const Contact = () => {
                   </a>
                 ))}
               </div>
+
+              {/* Socials + Resume */}
+              <div className="flex flex-wrap items-center gap-3 mt-6 pt-6 border-t border-border/50">
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="p-3 rounded-xl glass hover:bg-primary/10 hover:text-primary transition-all"
+                  >
+                    <s.icon className="w-5 h-5" />
+                  </a>
+                ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadCV}
+                  className="ms-auto"
+                >
+                  <Download className="w-4 h-4" />
+                  {t.contact.resume}
+                </Button>
+              </div>
             </div>
 
-            {/* Availability Card */}
-            <div className="glass rounded-3xl p-8 border border-primary/30">
+            {/* Availability */}
+            <div className="panel rounded-3xl p-8 border-primary/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                <span className="font-medium">Currently Available</span>
+                <span className="font-medium">{t.contact.available}</span>
               </div>
               <p className="text-muted-foreground text-sm">
-                I'm currently open to new opportunities and exciting projects.
-                Whether you need a full-time engineer or a freelance consultant,
-                let's talk!
+                {t.contact.availableBody}
               </p>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10171d"/>
+      <stop offset="1" stop-color="#0c1115"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg2)"/>
+
+  <!-- terminal window -->
+  <rect x="40" y="34" width="560" height="292" rx="10" fill="#0b1014" stroke="#1d2730" stroke-width="1.5"/>
+  <rect x="40" y="34" width="560" height="30" rx="10" fill="#141a1f"/>
+  <circle cx="62" cy="49" r="5" fill="#e0564b"/>
+  <circle cx="80" cy="49" r="5" fill="#e0a23b"/>
+  <circle cx="98" cy="49" r="5" fill="#43c478"/>
+  <text x="300" y="53" fill="#7a8491" font-size="11" text-anchor="middle">network-uptime-monitor</text>
+
+  <text x="62" y="92" fill="#20b2a6" font-size="13">NETWORK UPTIME MONITOR — 14:03:21</text>
+  <line x1="62" y1="104" x2="578" y2="104" stroke="#1d2730"/>
+
+  <!-- rows -->
+  <g font-size="13">
+    <text x="62" y="134" fill="#43c478">UP</text>
+    <text x="120" y="134" fill="#cdd7df">Core Router</text>
+    <text x="330" y="134" fill="#7a8491">192.168.10.1</text>
+    <text x="500" y="134" fill="#9fb0bd">12.4 ms</text>
+
+    <text x="62" y="162" fill="#43c478">UP</text>
+    <text x="120" y="162" fill="#cdd7df">Main Switch</text>
+    <text x="330" y="162" fill="#7a8491">192.168.10.2</text>
+    <text x="500" y="162" fill="#9fb0bd">0.9 ms</text>
+
+    <text x="62" y="190" fill="#e0564b">DOWN</text>
+    <text x="120" y="190" fill="#cdd7df">NVR</text>
+    <text x="330" y="190" fill="#7a8491">192.168.20.10</text>
+    <text x="500" y="190" fill="#5b6b78">—</text>
+
+    <text x="62" y="218" fill="#43c478">UP</text>
+    <text x="120" y="218" fill="#cdd7df">File Server</text>
+    <text x="330" y="218" fill="#7a8491">192.168.20.20</text>
+    <text x="500" y="218" fill="#9fb0bd">3.1 ms</text>
+  </g>
+
+  <line x1="62" y1="238" x2="578" y2="238" stroke="#1d2730"/>
+  <text x="62" y="266" fill="#f5a623" font-size="13">3/4 hosts up</text>
+  <rect x="62" y="282" width="516" height="8" rx="4" fill="#1d2730"/>
+  <rect x="62" y="282" width="387" height="8" rx="4" fill="#20b2a6"/>
+</svg>

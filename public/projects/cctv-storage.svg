@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" font-family="'JetBrains Mono', monospace">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10171d"/>
+      <stop offset="1" stop-color="#0c1115"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg4)"/>
+  <text x="24" y="34" fill="#20b2a6" font-size="13" letter-spacing="2">CCTV STORAGE PLANNER</text>
+
+  <!-- inputs panel -->
+  <rect x="40" y="58" width="250" height="252" rx="10" fill="#0b1014" stroke="#1d2730" stroke-width="1.5"/>
+  <text x="60" y="86" fill="#7a8491" font-size="11">INPUTS</text>
+  <g font-size="12">
+    <text x="60" y="118" fill="#9fb0bd">cameras</text><text x="250" y="118" fill="#e6f7f5" text-anchor="end">16</text>
+    <text x="60" y="150" fill="#9fb0bd">bitrate</text><text x="250" y="150" fill="#e6f7f5" text-anchor="end">4 Mbps</text>
+    <text x="60" y="182" fill="#9fb0bd">hours/day</text><text x="250" y="182" fill="#e6f7f5" text-anchor="end">24 h</text>
+    <text x="60" y="214" fill="#9fb0bd">retention</text><text x="250" y="214" fill="#e6f7f5" text-anchor="end">30 days</text>
+  </g>
+  <line x1="60" y1="236" x2="270" y2="236" stroke="#1d2730"/>
+  <text x="60" y="262" fill="#7a8491" font-size="10">bitrate × 3600 × h ÷ 8 ÷ 1000</text>
+  <text x="60" y="284" fill="#7a8491" font-size="10">× cameras × days</text>
+
+  <!-- arrow -->
+  <path d="M300 184 H346 l-10 -7 m10 7 l-10 7" fill="none" stroke="#20b2a6" stroke-width="2"/>
+
+  <!-- output panel -->
+  <rect x="360" y="58" width="240" height="252" rx="10" fill="#13202a" stroke="#20b2a6" stroke-width="1.5"/>
+  <text x="380" y="86" fill="#7a8491" font-size="11">ESTIMATE</text>
+
+  <text x="380" y="120" fill="#9fb0bd" font-size="11">per camera/day</text>
+  <text x="580" y="120" fill="#cdd7df" font-size="12" text-anchor="end">43.2 GB</text>
+
+  <text x="380" y="150" fill="#9fb0bd" font-size="11">all cameras/day</text>
+  <text x="580" y="150" fill="#cdd7df" font-size="12" text-anchor="end">691 GB</text>
+
+  <text x="380" y="192" fill="#9fb0bd" font-size="12">TOTAL REQUIRED</text>
+  <text x="490" y="232" fill="#20b2a6" font-size="34" text-anchor="middle" font-weight="bold">20.7 TB</text>
+
+  <line x1="380" y1="252" x2="580" y2="252" stroke="#234049"/>
+  <text x="380" y="280" fill="#f5a623" font-size="11">+20% headroom</text>
+  <text x="580" y="280" fill="#f5a623" font-size="12" text-anchor="end">24.9 TB</text>
+</svg>
