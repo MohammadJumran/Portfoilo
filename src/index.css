@@ -464,3 +464,201 @@
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* ============================================================
+   Cinematic intro — blurred site → sniper scope locks onto
+   "Password" → fires → glass shatter reveals the live page.
+   ============================================================ */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  overflow: hidden;
+  cursor: none;
+  will-change: transform;
+}
+
+.intro-blur {
+  position: absolute;
+  inset: -3vw;
+  background: rgba(9, 13, 17, 0.5);
+  backdrop-filter: blur(22px) saturate(120%);
+  -webkit-backdrop-filter: blur(22px) saturate(120%);
+  will-change: transform, opacity;
+}
+
+/* "Password" — styled as a locked-on target */
+.intro-target {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  will-change: transform, opacity;
+}
+.intro-target-box {
+  position: relative;
+  padding: 0.45em 0.85em;
+  animation: intro-target-pulse 1.6s ease-in-out infinite;
+}
+.intro-word {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 7.5vw, 3.4rem);
+  letter-spacing: 0.14em;
+  color: var(--color-primary);
+  text-shadow: 0 0 22px rgba(32, 178, 166, 0.55), 0 0 4px rgba(32, 178, 166, 0.8);
+  white-space: nowrap;
+}
+.intro-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+.intro-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-highlight);
+  opacity: 0.85;
+  will-change: transform, opacity;
+}
+.intro-corner.tl { top: -7px; left: -7px; border-right: 0; border-bottom: 0; }
+.intro-corner.tr { top: -7px; right: -7px; border-left: 0; border-bottom: 0; }
+.intro-corner.bl { bottom: -7px; left: -7px; border-right: 0; border-top: 0; }
+.intro-corner.br { bottom: -7px; right: -7px; border-left: 0; border-top: 0; }
+@keyframes intro-target-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+
+/* Impact crack lines */
+.intro-cracks {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.intro-cracks line {
+  stroke: rgba(240, 242, 245, 0.7);
+  stroke-width: 1.2;
+}
+
+/* Sniper scope */
+.intro-scope {
+  --reticle: #20b2a6;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(230px, 46vmin, 540px);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  will-change: transform, opacity;
+}
+.intro-scope-vignette {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 100vmax rgba(5, 8, 11, 0.6), inset 0 0 60px rgba(0, 0, 0, 0.7);
+}
+.intro-reticle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--reticle);
+  box-shadow: inset 0 0 0 1px rgba(240, 242, 245, 0.08),
+    0 0 26px color-mix(in srgb, var(--reticle) 35%, transparent);
+  will-change: transform;
+}
+.intro-ring-inner {
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--reticle) 45%, transparent);
+}
+.intro-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--reticle);
+  box-shadow: 0 0 10px var(--reticle);
+  transform: translate(-50%, -50%);
+}
+/* Crosshair hairlines (with mil-dot ticks) leaving a centre gap */
+.intro-line {
+  position: absolute;
+  opacity: 0.6;
+}
+.intro-line.top,
+.intro-line.bottom {
+  left: 50%;
+  width: 1px;
+  height: calc(50% - 16px);
+  transform: translateX(-50%);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(240, 242, 245, 0.6) 0 1px,
+    transparent 1px 13px
+  );
+}
+.intro-line.top { top: 4%; }
+.intro-line.bottom { bottom: 4%; }
+.intro-line.left,
+.intro-line.right {
+  top: 50%;
+  height: 1px;
+  width: calc(50% - 16px);
+  transform: translateY(-50%);
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(240, 242, 245, 0.6) 0 1px,
+    transparent 1px 13px
+  );
+}
+.intro-line.left { left: 4%; }
+.intro-line.right { right: 4%; }
+
+/* Impact flash */
+.intro-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(32, 178, 166, 0.6) 38%,
+    transparent 70%
+  );
+  z-index: 5;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Glass shards (each clipped to a polygon by JS) */
+.intro-shards {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.intro-shard {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(32, 178, 166, 0.06),
+    rgba(13, 18, 22, 0.5) 55%,
+    rgba(20, 26, 31, 0.58)
+  );
+  box-shadow: inset 0 0 0 1px rgba(240, 242, 245, 0.05);
+  will-change: transform, opacity;
+}

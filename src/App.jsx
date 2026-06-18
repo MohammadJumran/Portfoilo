@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { IntroAnimation } from "@/components/IntroAnimation";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { CustomCursor } from "@/components/CustomCursor";
 import { GlyphBackground } from "@/components/GlyphBackground";
@@ -33,6 +34,7 @@ const Home = () => (
 function App() {
   return (
     <SmoothScroll>
+      <IntroAnimation />
       <GlyphBackground />
       <MouseParallax />
       <CustomCursor />
